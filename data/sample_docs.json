@@ -1,0 +1,22 @@
+[
+  {
+    "id": "d1",
+    "title": "ACME Q3 earnings summary",
+    "text": "ACME reported strong revenue growth driven by cloud subscriptions. Operating margins expanded as infrastructure costs fell. Management raised full-year guidance."
+  },
+  {
+    "id": "d2",
+    "title": "GLOBEX sector outlook",
+    "text": "GLOBEX operates in a mature market with modest revenue growth. Its low P/E ratio reflects limited expansion but stable dividends and cash flow."
+  },
+  {
+    "id": "d3",
+    "title": "INITECH product launch note",
+    "text": "INITECH launched a new AI platform product. Revenue growth accelerated, though the valuation multiple remains high relative to earnings."
+  },
+  {
+    "id": "d4",
+    "title": "Market risk briefing",
+    "text": "Interest rate changes and currency movements are the main risks for diversified portfolios this quarter. Diversification and liquidity remain important."
+  }
+]
