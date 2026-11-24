@@ -25,3 +25,28 @@ def test_api_health_and_research():
     resp = client.post("/research", json={"question": "Tell me about GLOBEX valuation"})
     assert resp.status_code == 200
     assert resp.json()["evidence"]["market_data"][0]["ticker"] == "GLOBEX"
+
+
+def test_agent_compare_tickers():
+    result = ResearchAgent().compare(["ACME", "GLOBEX", "INITECH"])
+    assert [r["ticker"] for r in result["tickers"]] == ["ACME", "GLOBEX", "INITECH"]
+    # GLOBEX has the lowest P/E (15.8); INITECH grows fastest (18.9%); ACME is priciest.
+    assert result["summary"] == {
+        "lowest_pe": "GLOBEX",
+        "highest_revenue_growth": "INITECH",
+        "highest_price": "ACME",
+    }
+
+
+def test_agent_compare_with_unknown_ticker():
+    result = ResearchAgent().compare(["ACME", "NOPE"])
+    assert "error" in result["tickers"][1]
+    assert result["summary"]["lowest_pe"] == "ACME"
+
+
+def test_api_tickers_and_compare():
+    client = TestClient(app)
+    assert client.get("/tickers").json() == {"tickers": ["ACME", "GLOBEX", "INITECH"]}
+    resp = client.post("/compare", json={"tickers": ["ACME", "GLOBEX"]})
+    assert resp.status_code == 200
+    assert resp.json()["summary"]["highest_revenue_growth"] == "ACME"
