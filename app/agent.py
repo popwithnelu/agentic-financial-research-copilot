@@ -39,3 +39,24 @@ class ResearchAgent:
         answer = self.llm.complete(prompt)
         return {"question": question, "steps": steps, "evidence": evidence,
                 "answer": answer, "llm_mode": self.llm.mode}
+
+    def compare(self, tickers: list[str]) -> dict:
+        """Compare tickers side by side and highlight simple leaders.
+
+        Returns the raw market data for each known ticker plus a small
+        summary naming the cheapest (lowest P/E), fastest-growing, and
+        highest-priced ticker among those compared — useful context a
+        researcher would otherwise have to compute by hand.
+        """
+        rows = [self.market.run(t) for t in tickers]
+        known = [r for r in rows if "error" not in r]
+        summary: dict = {}
+        if known:
+            summary = {
+                "lowest_pe": min(known, key=lambda r: r["pe_ratio"])["ticker"],
+                "highest_revenue_growth": max(
+                    known, key=lambda r: r["revenue_growth_pct"]
+                )["ticker"],
+                "highest_price": max(known, key=lambda r: r["price"])["ticker"],
+            }
+        return {"tickers": rows, "summary": summary}
